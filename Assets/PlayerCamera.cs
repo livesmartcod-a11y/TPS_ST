@@ -1,15 +1,15 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerCamera : MonoBehaviour
 {
-    [Header("È¸Àü °¨µµ")]
+    [Header("íšŒì „ ì„¤ì •")]
     public float mouseSensitivity = 100f;
 
-    [Header("ÇÃ·¹ÀÌ¾î ¸öÃ¼ ÂüÁ¶")]
+    [Header("í”Œë ˆì´ì–´ ë³¸ì²´ ì°¸ì¡°")]
     public Transform playerBody;
 
-    [Header("»óÇÏ È¸Àü Á¦ÇÑ")]
+    [Header("ìˆ˜ì§ íšŒì „ ì œí•œ")]
     public float minPitch = -90f;
     public float maxPitch = 90f;
 
@@ -17,7 +17,7 @@ public class PlayerCamera : MonoBehaviour
 
     void Start()
     {
-        // °ÔÀÓ ½ÃÀÛ ½Ã ¸¶¿ì½º Ä¿¼­¸¦ È­¸é Áß¾Ó¿¡ °íÁ¤ÇÏ°í ¼û±é´Ï´Ù.
+        // ê²Œì„ ì‹œì‘ ì‹œ ë§ˆìš°ìŠ¤ ì»¤ì„œë¥¼ í™”ë©´ ì¤‘ì•™ì— ê³ ì •í•˜ê³  ìˆ¨ê¹ë‹ˆë‹¤. 
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -25,22 +25,22 @@ public class PlayerCamera : MonoBehaviour
     {
         if (Mouse.current == null) return;
 
-        // »õ·Î¿î Input SystemÀ» »ç¿ëÇÏ¿© ¸¶¿ì½º µ¨Å¸(¿òÁ÷ÀÓ) °ª ¹Ş±â
+        // ìƒˆë¡œìš´ Input Systemì„ ì‚¬ìš©í•˜ì—¬ ë§ˆìš°ìŠ¤ ë¸íƒ€(ì›€ì§ì„) ê°’ ë°›ê¸°
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
         float mouseX = mouseDelta.x * mouseSensitivity * Time.deltaTime;
         float mouseY = mouseDelta.y * mouseSensitivity * Time.deltaTime;
 
-        // ¼öÁ÷ È¸Àü(Pitch) °è»ê: ¸¶¿ì½º¸¦ À§·Î ¿Ã¸®¸é xRotation °ªÀÌ ÀÛ¾ÆÁ®¾ß À§¸¦ º¾´Ï´Ù.
+        // ìˆ˜ì§ íšŒì „(Pitch) ê³„ì‚°: ë§ˆìš°ìŠ¤ë¥¼ ìœ„ë¡œ ì˜¬ë¦¬ë©´ xRotation ê°’ì´ ì‘ì•„ì§€ë„ë¡ ì„¤ì •í•©ë‹ˆë‹¤.
         xRotation -= mouseY;
-        // À§¾Æ·¡·Î ³Ê¹« ¸¹ÀÌ È¸ÀüÇÏÁö ¾Êµµ·Ï -90µµ¿¡¼­ 90µµ »çÀÌ·Î Á¦ÇÑ(Clamp)ÇÕ´Ï´Ù.
+        // ìœ„ì•„ë˜ë¡œ ë„ˆë¬´ ë§ì´ íšŒì „í•˜ì§€ ì•Šë„ë¡ -90ë„ì—ì„œ 90ë„ ì‚¬ì´ë¡œ ì œí•œ(Clamp)í•©ë‹ˆë‹¤.
         xRotation = Mathf.Clamp(xRotation, minPitch, maxPitch);
 
-        // Ä«¸Ş¶óÀÇ ·ÎÄÃ È¸Àü Àû¿ë (»óÇÏ È¸Àü)
-        // ºÎ¸ğÀÎ Camera Holder¸¦ ±âÁØÀ¸·Î Ä«¸Ş¶ó¸¸ À§¾Æ·¡·Î ¿òÁ÷ÀÔ´Ï´Ù.
+        // ì¹´ë©”ë¼ì˜ ìˆ˜ì§ íšŒì „ ì ìš© (ìƒí•˜ íšŒì „)
+        // ë¶€ëª¨ì¸ Camera HolderëŠ” ê³ ì •ë˜ê³  ì¹´ë©”ë¼ë§Œ ìœ„ì•„ë˜ë¡œ ì›€ì§ì…ë‹ˆë‹¤.
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        // ÇÃ·¹ÀÌ¾î ¸öÃ¼ È¸Àü Àû¿ë (ÁÂ¿ì È¸Àü)
-        // ¸öÃ¼ ÀÚÃ¼°¡ È¸ÀüÇÏ¹Ç·Î ÀÚ½ÄÀÎ Camera Holder¿Í Ä«¸Ş¶óµµ ÇÔ²² È¸ÀüÇÕ´Ï´Ù.
+        // í”Œë ˆì´ì–´ ë³¸ì²´ íšŒì „ ì ìš© (ì¢Œìš° íšŒì „)
+        // ë³¸ì²´ ì „ì²´ê°€ íšŒì „í•˜ë¯€ë¡œ ìì‹ì¸ Camera Holderì™€ ì¹´ë©”ë¼ë„ í•¨ê»˜ íšŒì „í•©ë‹ˆë‹¤.
         playerBody.Rotate(Vector3.up * mouseX);
     }
 }

@@ -1,20 +1,20 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class SpawnPoint : MonoBehaviour
 {
-    [Header("½ºÆù ¼³Á¤")]
-    public string spawnID; // Æ÷Å»¿¡¼­ ÁöÁ¤ÇÒ ID
+    [Header("ìŠ¤í° ì„¤ì •")]
+    public string spawnID; // í¬íƒˆì´ë‚˜ ìƒì„±ìš© ID
     public Color gizmoColor = Color.green;
 
-    // ¾À ºä¿¡¼­ Ç×»ó º¸ÀÌµµ·Ï ¼³Á¤
+    // ì”¬ ë·°ì—ì„œ í•­ìƒ ê°€ì‹œì„±ì„ ìœ ì§€
     void OnDrawGizmos()
     {
         Gizmos.color = gizmoColor;
-        // Ä³¸¯ÅÍ Å©±â(¾à 2m)ÀÇ ¹Ú½º¸¦ ±×·Á À§Ä¡ È®ÀÎÀ» µ½½À´Ï´Ù.
+        // ìºë¦­í„° í¬ê¸°(ì•½ 2m)ì˜ ë°•ìŠ¤ë¥¼ ê·¸ë ¤ ìœ„ì¹˜ í™•ì¸ì„ ë•ìŠµë‹ˆë‹¤. 
         Vector3 center = transform.position + Vector3.up * 1f;
         Gizmos.DrawWireCube(center, new Vector3(0.6f, 2f, 0.6f));
         
-        // Ä³¸¯ÅÍ°¡ ¹Ù¶óº¼ Á¤¸é ¹æÇâÀ» È­»ìÇ¥·Î Ç¥½ÃÇÕ´Ï´Ù.
+        // ìºë¦­í„°ê°€ ë°”ë¼ë³´ëŠ” ì •ë©´ ë°©í–¥ì„ í™”ì‚´í‘œë¡œ í‘œì‹œí•©ë‹ˆë‹¤. 
         Gizmos.DrawRay(center, transform.forward * 1f);
     }
 }

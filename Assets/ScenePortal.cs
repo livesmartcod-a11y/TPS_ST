@@ -1,25 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ScenePortal : MonoBehaviour
 {
-    [Header("Æ÷Å» ¼³Á¤")]
-    public string sceneToLoad;      // ÀÌµ¿ÇÒ ¾ÀÀÇ ÀÌ¸§ (Build Settings¿¡ µî·ÏµÇ¾î ÀÖ¾î¾ß ÇÔ)
-    public float radius = 1.5f;     // ÇÃ·¹ÀÌ¾î °¨Áö ¹İ°æ
-    public LayerMask playerLayer;   // ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ®ÀÇ ·¹ÀÌ¾î
+    [Header("í¬íƒˆ ì„¤ì •")]
+    public string sceneToLoad;      // ì´ë™í•  ì”¬ ì´ë¦„ (Build Settingsì— ë“±ë¡ë˜ì–´ ìˆì–´ì•¼ í•¨)
+    public float radius = 1.5f;     // í”Œë ˆì´ì–´ ê°ì§€ ë°˜ê²½
+    public LayerMask playerLayer;   // í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ì˜ ë ˆì´ì–´
     public Color portalColor = Color.red;
-    public string targetSpawnID;    // ÀÌµ¿ÇÒ ¾À¿¡¼­ »ç¿ëÇÒ ½ºÆù ÁöÁ¡ ID
+    public string targetSpawnID;    // ì´ë™í•  ì”¬ì—ì„œ ì‚¬ìš©í•  ìŠ¤í° ì§€ì  ID
 
-    // ´ÙÀ½ ¾À¿¡¼­ ÂüÁ¶ÇÒ ¼ö ÀÖµµ·Ï Á¤Àû(static) º¯¼ö¿¡ ÀúÀåÇÕ´Ï´Ù.
+   // ë‹¤ìŒ ì”¬ìœ¼ë¡œ ì •ë³´ë¥¼ ë„˜ê¸¸ ìˆ˜ ìˆë„ë¡ ì •ì (static) ë³€ìˆ˜ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
     public static string nextSpawnID;
 
-    private bool isTransitioning = false; // ¾À ÀüÈ¯ ÁßÀÎÁö È®ÀÎÇÏ´Â º¯¼ö
+    private bool isTransitioning = false; // ì”¬ ì „í™˜ ì¤‘ì¸ì§€ í™•ì¸í•˜ëŠ” ë³€ìˆ˜
 
     void Update()
     {
-        if (isTransitioning) return; // ÀÌ¹Ì ÀüÈ¯ ÁßÀÌ¶ó¸é ¾Æ·¡ ÄÚµå¸¦ ½ÇÇàÇÏÁö ¾ÊÀ½
+        if (isTransitioning) return; // ì´ë¯¸ ì „í™˜ ì¤‘ì´ë¼ë©´ ì•„ë˜ ì½”ë“œë¥¼ ì‹¤í–‰í•˜ì§€ ì•ŠìŒ
 
-        // ÁöÁ¤µÈ À§Ä¡¿¡¼­ ¹İ°æ ³»¿¡ ÇÃ·¹ÀÌ¾î ·¹ÀÌ¾î¸¦ °¡Áø ¿ÀºêÁ§Æ®°¡ ÀÖ´ÂÁö Ã¼Å©
+        // í¬íƒˆì˜ ìœ„ì¹˜ì—ì„œ ë°˜ê²½ ë‚´ì— í”Œë ˆì´ì–´ ë ˆì´ì–´ë¥¼ ê°€ì§„ ì˜¤ë¸Œì íŠ¸ê°€ ìˆëŠ”ì§€ ì²´í¬
         if (Physics.CheckSphere(transform.position, radius, playerLayer))
         {
             if (string.IsNullOrEmpty(sceneToLoad) || SceneManager.GetActiveScene().name == sceneToLoad)
@@ -28,20 +28,20 @@ public class ScenePortal : MonoBehaviour
             }
 
             isTransitioning = true;
-            nextSpawnID = targetSpawnID; // ½ºÆù ID¸¦ Á¤Àû º¯¼ö¿¡ ÀúÀå
-            Debug.Log($"{sceneToLoad} ¾ÀÀ¸·Î ÀÌµ¿À» ½ÃÀÛÇÕ´Ï´Ù.");
+            nextSpawnID = targetSpawnID; // ìŠ¤í° IDë¥¼ ì •ì  ë³€ìˆ˜ì— ì €ì¥
+            Debug.Log($"{sceneToLoad} ì”¬ìœ¼ë¡œ ì´ë™ì„ ì‹œì‘í•©ë‹ˆë‹¤.");
             SceneManager.LoadSceneAsync(sceneToLoad);
         }
     }
 
-        // ¾À ºä¿¡¼­ Æ÷Å»ÀÇ ¹üÀ§¸¦ ½Ã°¢ÀûÀ¸·Î Ç¥½Ã
+        // ì—ë””í„° ë·°ì—ì„œ í¬íƒˆì˜ ë²”ìœ„ë¥¼ ì‹œê°ì ìœ¼ë¡œ í‘œì‹œ
     void OnDrawGizmos()
     {
-        // Æ÷Å» ¹üÀ§ Ç¥½Ã (»¡°£»ö Åõ¸í ±¸Ã¼)
+        // í¬íƒˆ ë²”ìœ„ í‘œì‹œ (ë°˜íˆ¬ëª… êµ¬ì²´)
         Gizmos.color = new Color(portalColor.r, portalColor.g, portalColor.b, 0.3f);
         Gizmos.DrawSphere(transform.position, radius);
 
-        // Å×µÎ¸® ¼± Ç¥½Ã
+        // í…Œë‘ë¦¬ ì„  í‘œì‹œ
         Gizmos.color = portalColor;
         Gizmos.DrawWireSphere(transform.position, radius);
     }

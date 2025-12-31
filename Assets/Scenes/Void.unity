@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad544cadbb9cf4b478169fc1d89857ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnPoint
-  spawnID: void
+  spawnID: void_start
   gizmoColor: {r: 0, g: 1, b: 0, a: 1}
 --- !u!4 &1831489989
 Transform:

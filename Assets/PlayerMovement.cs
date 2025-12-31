@@ -1,17 +1,17 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("ÀÌµ¿ ¼³Á¤")]
+    [Header("ì´ë™ ì„¤ì •")]
     public float speed = 12f;
     public float runSpeed = 20f;
     public float jumpHeight = 3f;
     public float gravity = -9.81f;
-    public float fallMultiplier = 2.5f; // ¶³¾îÁú ¶§ Àû¿ëÇÒ ¹è¼ö
+    public float fallMultiplier = 2.5f; // ë–¨ì–´ì§ˆ ë•Œ ì¤‘ë ¥ ë°°ìœ¨
 
-    [Header("Áö¸é Ã¼Å© ¼³Á¤")]
+    [Header("ì§€ë©´ ì²´í¬ ì„¤ì •")]
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
@@ -20,13 +20,19 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
+    void Awake()
+    {
+        // ì”¬ì´ ë°”ë€Œì–´ë„ í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ê°€ íŒŒê´´ë˜ì§€ ì•Šë„ë¡ ì„¤ì •
+        DontDestroyOnLoad(gameObject);
+    }
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
-        // ¾À ½ÃÀÛ ½Ã ¼Óµµ ÃÊ±âÈ­
+        // ì”¬ ì‹œì‘ ì‹œ ì†ë„ ì´ˆê¸°í™”
         velocity = Vector3.zero;
 
-        // ¾À ÀüÈ¯ ½Ã ¼³Á¤µÈ ½ºÆù ID°¡ ÀÖ´ÂÁö È®ÀÎÇÕ´Ï´Ù.
+        // ì”¬ ì „í™˜ í›„ ì €ì¥ëœ ìŠ¤í° IDê°€ ìˆëŠ”ì§€ í™•ì¸í•©ë‹ˆë‹¤. 
         if (!string.IsNullOrEmpty(ScenePortal.nextSpawnID))
         {
             SpawnPoint[] spawnPoints = Object.FindObjectsByType<SpawnPoint>(FindObjectsSortMode.None);
@@ -34,17 +40,17 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (sp.spawnID == ScenePortal.nextSpawnID)
                 {
-                    // CharacterController°¡ ÄÑÁ® ÀÖÀ¸¸é À§Ä¡ °­Á¦ ÀÌµ¿ÀÌ ¹«½ÃµÉ ¼ö ÀÖÀ¸¹Ç·Î Àá½Ã ²ü´Ï´Ù.
+                    // CharacterControllerê°€ ì¼œì ¸ ìˆìœ¼ë©´ ìœ„ì¹˜ ì§ì ‘ ì´ë™ì´ ë¬´ì‹œë  ìˆ˜ ìˆìœ¼ë¯€ë¡œ ì ì‹œ ë•ë‹ˆë‹¤.
                     controller.enabled = false;
                     transform.position = sp.transform.position;
                     transform.rotation = sp.transform.rotation;
                     controller.enabled = true;
                     
-                    Debug.Log($"SpawnPoint '{sp.spawnID}' À§Ä¡·Î ½ºÆùµÇ¾ú½À´Ï´Ù.");
+                    Debug.Log($"SpawnPoint '{sp.spawnID}' ìœ„ì¹˜ë¡œ ì„¤ì •ë˜ì—ˆìŠµë‹ˆë‹¤.");
                     break;
                 }
             }
-            // »ç¿ëÇÑ ID´Â ÃÊ±âÈ­ÇÕ´Ï´Ù.
+            // ìŠ¤í° IDë¥¼ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
             ScenePortal.nextSpawnID = null;
         }
     }
@@ -53,17 +59,17 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Keyboard.current == null) return;
 
-        // groundCheck°¡ ÇÒ´çµÇÁö ¾Ê¾ÒÀ» °æ¿ì °æ°í¸¦ ¶ç¿ì°í ·ÎÁ÷À» Áß´ÜÇÕ´Ï´Ù.
+        // groundCheckê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ì„ ê²½ìš° ì—ëŸ¬ ë°©ì§€ë¥¼ ìœ„í•´ ì—…ë°ì´íŠ¸ë¥¼ ì¤‘ë‹¨í•©ë‹ˆë‹¤.
         if (groundCheck == null)
         {
-            Debug.LogWarning("Ground Check ¿ÀºêÁ§Æ®°¡ ÇÒ´çµÇÁö ¾Ê¾Ò½À´Ï´Ù! ÇÃ·¹ÀÌ¾î ¹ß¹Ø¿¡ ºó ¿ÀºêÁ§Æ®¸¦ ¸¸µé°í ÇÒ´çÇØÁÖ¼¼¿ä.");
+            Debug.LogWarning("Ground Check ì˜¤ë¸Œì íŠ¸ê°€ í• ë‹¹ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤! í”Œë ˆì´ì–´ ë°œë°‘ì— ë¹ˆ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„±í•´ í• ë‹¹í•´ì£¼ì„¸ìš”.");
             return;
         }
 
-        // ¹ß¹Ø¿¡ °¡»óÀÇ ±¸Ã¼¸¦ ¸¸µé¾î Áö¸é ·¹ÀÌ¾î¿Í ´ê¾ÆÀÖ´ÂÁö Ã¼Å©
+        // ë°œë°‘ì— ì§€ë©´ ë ˆì´ì–´ë¥¼ ê°€ì§„ ë¬¼ì²´ê°€ ìˆëŠ”ì§€ ì²´í¬
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
-        // WASD ÀÔ·Â ¹Ş±â
+        // WASD ì…ë ¥ ë°›ê¸°
         float x = 0;
         float z = 0;
 
@@ -72,17 +78,17 @@ public class PlayerMovement : MonoBehaviour
         if (Keyboard.current.aKey.isPressed) x -= 1;
         if (Keyboard.current.dKey.isPressed) x += 1;
 
-        // Shift Å°¸¦ ´©¸£°í ÀÖÀ¸¸é ´Ş¸®±â ¼Óµµ Àû¿ë
+        // Shift í‚¤ë¥¼ ëˆ„ë¥´ê³  ìˆìœ¼ë©´ ë‹¬ë¦¬ê¸° ì†ë„ ì ìš©
         float currentSpeed = Keyboard.current.leftShiftKey.isPressed ? runSpeed : speed;
 
-        // ÇÃ·¹ÀÌ¾î°¡ ¹Ù¶óº¸´Â ¹æÇâ ±âÁØÀ¸·Î ÀÌµ¿ ¹æÇâ °è»ê
+        // í”Œë ˆì´ì–´ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ ê¸°ì¤€ìœ¼ë¡œ ì´ë™ ë°©í–¥ ê³„ì‚°
         Vector3 move = transform.right * x + transform.forward * z;
 
-        // Áß·Â Àû¿ë (¹Ù´Ú¿¡ ºÙ¾îÀÖ°Ô ÇÔ)
+        // ì¤‘ë ¥ ì ìš© (ë°”ë‹¥ì— ë¶™ì–´ìˆê²Œ í•¨)
         if (isGrounded && velocity.y < 0)
-            velocity.y = -2f; // ¹Ù´Ú¿¡ ´ê¾ÆÀÖÀ» ¶§ ¾ÆÁÖ »ìÂ¦ ¾Æ·¡·Î ´©¸£´Â Èû
+            velocity.y = -2f; // ë°”ë‹¥ì— ë‹¿ì•„ìˆì„ ë•Œ ì¤‘ë ¥ì„ ì‚´ì§ ì•„ë˜ë¡œ ìœ ì§€
 
-        // Á¡ÇÁ ÀÔ·Â Ã³¸® (¹Ù´Ú¿¡ ÀÖÀ» ¶§¸¸ °¡´É)
+        // ì í”„ ì…ë ¥ ì²˜ë¦¬ (ë°”ë‹¥ì— ìˆì„ ë•Œë§Œ ê°€ëŠ¥)
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             if (isGrounded)
@@ -91,10 +97,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // Áß·Â Àû¿ë
+        // ì¤‘ë ¥ ê°€ì†
         if (velocity.y < 0)
         {
-            // ¶³¾îÁú ¶§´Â ´õ ºü¸£°Ô ¶³¾îÁö°Ô ÇÏ¿© ºÎÀ¯°¨À» ÁÙÀÓ
+            // ë–¨ì–´ì§€ëŠ” ì¤‘ì¼ ë•Œ ì¤‘ë ¥ì„ ë” ê°•í•˜ê²Œ ì ìš©í•˜ì—¬ ë¬µì§í•˜ê²Œ ë‚™í•˜
             velocity.y += gravity * fallMultiplier * Time.deltaTime;
         }
         else
@@ -102,12 +108,12 @@ public class PlayerMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-        // ¸ğµç ÀÌµ¿(WASD + Áß·Â/Á¡ÇÁ)À» ÇÏ³ªÀÇ º¤ÅÍ·Î ÇÕÃÄ¼­ ÇÑ ¹ø¸¸ ½ÇÇà
+        // ëª¨ë“  ì´ë™(WASD + ì¤‘ë ¥/ì í”„)ì„ í•˜ë‚˜ì˜ ë²¡í„°ë¡œ í•©ì³ì„œ ì‹¤ì œ ì´ë™
         Vector3 finalMove = (move * currentSpeed) + velocity;
         controller.Move(finalMove * Time.deltaTime);
     }
 
-    // ¿¡µğÅÍ¿¡¼­ Áö¸é Ã¼Å© ¹üÀ§¸¦ ½Ã°¢ÀûÀ¸·Î È®ÀÎÇÏ±â À§ÇÑ ÄÚµå
+    // ì—ë””í„°ì—ì„œ ì§€ë©´ ì²´í¬ ë²”ìœ„ë¥¼ ì‹œê°ì ìœ¼ë¡œ í™•ì¸í•˜ê¸° ìœ„í•œ ì½”ë“œ
     void OnDrawGizmosSelected()
     {
         if (groundCheck == null) return;
